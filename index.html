@@ -371,6 +371,47 @@
       cursor: none;
     }
 
+    /* MOBILE CONTROL PAD ZONE */
+    .touch-control-zone {
+      width: 100%;
+      height: 64px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      margin-top: 15px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.02);
+      touch-action: none;
+      cursor: ew-resize;
+    }
+
+    .control-pad-line {
+      width: 78%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--color-pink), var(--color-purple), var(--color-pink), transparent);
+      opacity: 0.55;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .control-text {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.45);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      z-index: 2;
+      background: #180d28; /* Match Twilight overlay */
+      padding: 3px 12px;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
     /* SCREEN 2: PROPOSAL SCREEN & RUNAWAY BUTTON */
     .proposal-card {
       max-width: 550px;
@@ -459,7 +500,7 @@
       padding: 12px 40px;
       color: var(--color-white);
       font-family: var(--font-sans);
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 800;
       cursor: pointer;
       min-height: 48px; /* Tapping area size */
@@ -655,11 +696,17 @@
         </div>
 
         <h2 class="section-title text-center" style="margin-bottom: 5px;">Catch My Hearts! 💕</h2>
-        <p class="game-instruction">Move your mouse or slide your finger left/right to catch the falling hearts. Don't catch the rain clouds!</p>
+        <p class="game-instruction">Slide your finger left/right to catch the falling hearts. Don't catch the rain clouds!</p>
 
         <!-- Canvas for the catching game -->
         <div class="canvas-wrapper">
           <canvas id="game-canvas" width="400" height="300"></canvas>
+        </div>
+
+        <!-- DEDICATED CONTROL PAD TO PREVENT FINGER FROM COVERING BASKET -->
+        <div class="touch-control-zone">
+          <div class="control-pad-line"></div>
+          <span class="control-text">👈 CONTROL PAD 👉</span>
         </div>
       </div>
     </section>
@@ -1039,14 +1086,29 @@
           handleMove(e.clientX);
         });
 
-        const wrapper = this.canvas.parentNode;
-        wrapper.addEventListener('touchmove', (e) => {
+        // Touch event processor
+        const processTouch = (e) => {
           if (!this.isActive) return;
           e.preventDefault();
           if (e.touches.length > 0) {
-            handleMove(e.touches[0].clientX);
+            const rect = this.canvas.getBoundingClientRect();
+            const clientX = e.touches[0].clientX;
+            const relativeX = clientX - rect.left;
+            this.basket.targetX = Math.max(0, Math.min(this.canvas.width - this.basket.width, relativeX - this.basket.width / 2));
           }
-        }, { passive: false });
+        };
+
+        // Bind touch event to both the canvas wrapper AND the Control Pad
+        const wrapper = this.canvas.parentNode;
+        const touchZone = document.querySelector('.touch-control-zone');
+
+        wrapper.addEventListener('touchmove', processTouch, { passive: false });
+        wrapper.addEventListener('touchstart', processTouch, { passive: false });
+
+        if (touchZone) {
+          touchZone.addEventListener('touchmove', processTouch, { passive: false });
+          touchZone.addEventListener('touchstart', processTouch, { passive: false });
+        }
 
         window.addEventListener('resize', () => {
           this.resizeCanvas();
