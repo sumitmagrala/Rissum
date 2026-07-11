@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Hi Rissum! ✨</title>
   <!-- Google Fonts for romantic, cute, and premium typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,6 +43,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent; /* Disable tap highlight box on mobile */
     }
 
     body {
@@ -51,26 +52,12 @@
       background-image: var(--bg-gradient);
       color: var(--color-white);
       min-height: 100vh;
+      min-height: 100dvh; /* Modern viewport height to fix mobile browser bar resize */
       overflow-x: hidden;
       position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-
-    /* Scrollbars */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.2);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(244, 63, 94, 0.3);
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(244, 63, 94, 0.6);
     }
 
     /* BACKGROUND FLOATING PARTICLES */
@@ -80,6 +67,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
+      height: 100dvh;
       z-index: 1;
       pointer-events: none;
       overflow: hidden;
@@ -111,26 +99,28 @@
       }
     }
 
-    /* FLOATING INTERFACE */
+    /* FLOATING INTERFACE (PLACED BOTTOM LEFT TO AVOID TOUCH INTERFERENCE) */
     .floating-btn {
       position: fixed;
-      top: 20px;
-      right: 20px;
+      bottom: 20px;
+      left: 20px;
+      top: auto;
+      right: auto;
       z-index: 100;
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
       border-radius: 50px;
-      padding: 10px 20px;
+      padding: 8px 16px;
       color: var(--color-white);
       font-family: var(--font-sans);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
       transition: var(--transition-smooth);
     }
@@ -159,7 +149,7 @@
     #app-container {
       width: 90%;
       max-width: 900px;
-      min-height: 500px;
+      min-height: 480px;
       z-index: 10;
       position: relative;
       display: flex;
@@ -195,7 +185,7 @@
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
       border-radius: 24px;
-      padding: 40px;
+      padding: 40px 30px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(168, 85, 247, 0.1);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
@@ -260,6 +250,7 @@
       font-weight: 600;
       cursor: pointer;
       margin-top: 25px;
+      min-height: 44px; /* Touch target minimum */
       transition: var(--transition-fast);
     }
 
@@ -296,10 +287,10 @@
     .game-hud {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       background: rgba(0, 0, 0, 0.2);
       border-radius: 12px;
-      padding: 12px 20px;
+      padding: 10px 18px;
       border: 1px solid rgba(255, 255, 255, 0.03);
     }
 
@@ -310,24 +301,24 @@
     }
 
     .hud-label {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: rgba(255, 255, 255, 0.5);
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
     .hud-value {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 600;
     }
 
     .love-meter-container {
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
     .love-meter-label {
-      font-size: 0.9rem;
-      margin-bottom: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
       text-align: left;
       display: flex;
       justify-content: space-between;
@@ -341,7 +332,7 @@
 
     .love-meter-track {
       width: 100%;
-      height: 14px;
+      height: 12px;
       background: rgba(0, 0, 0, 0.4);
       border-radius: 50px;
       overflow: hidden;
@@ -358,9 +349,9 @@
     }
 
     .game-instruction {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: rgba(255, 255, 255, 0.7);
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
 
     .canvas-wrapper {
@@ -369,7 +360,7 @@
       border-radius: 16px;
       overflow: hidden;
       position: relative;
-      touch-action: none;
+      touch-action: none; /* Block browser swipe-to-scroll gestures */
     }
 
     #game-canvas {
@@ -386,21 +377,21 @@
     }
 
     .proposal-visual {
-      height: 120px;
+      height: 100px;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     .heart-pulse-container {
       position: relative;
-      width: 100px;
-      height: 100px;
+      width: 90px;
+      height: 90px;
     }
 
     .main-pulsing-heart {
-      font-size: 4rem;
+      font-size: 3.5rem;
       position: absolute;
       top: 50%;
       left: 50%;
@@ -413,8 +404,8 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       border: 2px solid var(--color-pink);
       border-radius: 50%;
       transform: translate(-50%, -50%) scale(1);
@@ -437,17 +428,17 @@
     }
 
     .proposal-text {
-      font-size: 1.05rem;
-      line-height: 1.7;
+      font-size: 1rem;
+      line-height: 1.6;
       color: rgba(255,255,255,0.9);
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     .proposal-question {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 800;
       color: var(--color-pink-light);
-      margin-bottom: 35px;
+      margin-bottom: 25px;
       text-shadow: 0 0 8px var(--primary-glow);
     }
 
@@ -457,7 +448,7 @@
       align-items: center;
       gap: 30px;
       position: relative;
-      min-height: 80px;
+      min-height: 110px; /* Taller area so button can dodge freely without jumping off screen */
       width: 100%;
     }
 
@@ -465,12 +456,13 @@
       background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
       border: none;
       border-radius: 12px;
-      padding: 14px 45px;
+      padding: 12px 40px;
       color: var(--color-white);
       font-family: var(--font-sans);
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 800;
       cursor: pointer;
+      min-height: 48px; /* Tapping area size */
       box-shadow: 0 4px 15px rgba(255, 75, 43, 0.3);
       transition: transform 0.2s ease;
       z-index: 10;
@@ -482,20 +474,21 @@
 
     @keyframes pulse-grow-anim {
       0% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 75, 43, 0.3); }
-      100% { transform: scale(1.08); box-shadow: 0 8px 25px rgba(255, 75, 43, 0.6), 0 0 15px var(--color-pink-glow); }
+      100% { transform: scale(1.06); box-shadow: 0 8px 25px rgba(255, 75, 43, 0.6), 0 0 15px var(--color-pink-glow); }
     }
 
     .no-btn {
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 12px;
-      padding: 14px 45px;
+      padding: 12px 40px;
       color: rgba(255, 255, 255, 0.7);
       font-family: var(--font-sans);
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 500;
       cursor: pointer;
-      transition: transform 0.1s ease, left 0.1s ease, top 0.1s ease;
+      min-height: 48px;
+      transition: transform 0.15s cubic-bezier(0.25, 0.8, 0.25, 1), left 0.15s cubic-bezier(0.25, 0.8, 0.25, 1), top 0.15s cubic-bezier(0.25, 0.8, 0.25, 1);
       z-index: 10;
       position: relative;
     }
@@ -503,16 +496,16 @@
     /* SCREEN 3: SUCCESS FUNNY PANEL */
     .success-card {
       max-width: 500px;
-      padding: 40px 30px;
+      padding: 40px 25px;
     }
 
     .success-header {
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     .celebration-emojis {
-      font-size: 2.2rem;
-      margin-bottom: 10px;
+      font-size: 2rem;
+      margin-bottom: 8px;
       animation: throw-up 1s ease-out;
     }
 
@@ -526,18 +519,18 @@
       background: rgba(255, 255, 255, 0.04);
       border: 1px dashed rgba(244, 63, 94, 0.3);
       border-radius: 16px;
-      padding: 25px;
+      padding: 20px;
       text-align: left;
       box-shadow: inset 0 0 15px rgba(244, 63, 94, 0.05);
-      margin-bottom: 10px;
+      margin-bottom: 5px;
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 12px;
     }
 
     .funny-line {
-      font-size: 1.05rem;
-      line-height: 1.6;
+      font-size: 0.98rem;
+      line-height: 1.5;
       color: rgba(255, 255, 255, 0.9);
       border-left: 3px solid transparent;
       padding-left: 10px;
@@ -562,23 +555,34 @@
       left: 0;
       width: 100vw;
       height: 100vh;
+      height: 100dvh;
       z-index: 99;
       pointer-events: none;
       display: none;
     }
 
-    /* RESPONSIVE DESIGN & MOBILE FIXES */
+    /* RESPONSIVE DESIGN & MOBILE FIXES (PUSH CARD UP & ADJUST FLOATING MUSIC BUTTON) */
     @media (max-width: 600px) {
       body {
-        padding: 10px 0;
+        align-items: flex-start; /* Push layout container up */
       }
 
       #app-container {
-        margin: 20px auto;
+        margin: 25px auto 0 auto; /* Small top margin, leaving bottom area empty for thumbs */
+        width: 92%;
+      }
+
+      .floating-btn {
+        bottom: 15px; /* Floating mute button placed at bottom-left */
+        left: 15px;
+        top: auto;
+        right: auto;
+        padding: 8px 14px;
+        font-size: 0.75rem;
       }
 
       .glass-card {
-        padding: 25px 20px;
+        padding: 24px 18px;
         border-radius: 20px;
       }
 
@@ -588,15 +592,27 @@
 
       .button-choice-container {
         gap: 15px;
+        min-height: 120px;
       }
 
       .yes-btn, .no-btn {
-        padding: 12px 30px;
-        font-size: 1rem;
+        padding: 10px 25px;
+        font-size: 0.95rem;
+        min-height: 48px;
       }
 
       .funny-line {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
+      }
+
+      .proposal-text {
+        font-size: 0.92rem;
+        line-height: 1.5;
+      }
+
+      .proposal-question {
+        font-size: 1.05rem;
+        margin-bottom: 15px;
       }
     }
   </style>
@@ -606,9 +622,9 @@
   <!-- Floating particles in the background -->
   <div id="particles-container"></div>
 
-  <!-- Music toggle button in top right -->
+  <!-- Music toggle button positioned floating at bottom-left -->
   <button id="music-toggle" class="floating-btn" aria-label="Toggle Music">
-    <svg class="music-icon icon-playing" viewBox="0 0 24 24" width="24" height="24">
+    <svg class="music-icon icon-playing" viewBox="0 0 24 24" width="20" height="20">
       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
     </svg>
     <span class="music-text">Play Music</span>
@@ -643,12 +659,12 @@
 
         <!-- Canvas for the catching game -->
         <div class="canvas-wrapper">
-          <canvas id="game-canvas" width="400" height="350"></canvas>
+          <canvas id="game-canvas" width="400" height="300"></canvas>
         </div>
       </div>
     </section>
 
-    <!-- SCREEN 2: PROPOSAL SCREEN (RE-WRITTEN WITH FUNNY SARCASTIC BEAUTY LINES) -->
+    <!-- SCREEN 2: PROPOSAL SCREEN -->
     <section id="proposal-screen" class="screen">
       <div class="glass-card proposal-card">
         <div class="proposal-visual">
@@ -666,7 +682,7 @@
           I built this entire heart-catching digital laboratory just to state the obvious: your beauty is getting criminally out of hand. Honestly, it's a major safety hazard. ⚠️
         </p>
         
-        <p class="proposal-text" style="margin-bottom: 30px;">
+        <p class="proposal-text" style="margin-bottom: 25px;">
           My eyes literally lag trying to process how someone can look this cute. Scientists are still debating if you are a real human or just a cheat code for perfect aesthetic settings. I'm leaning towards cheat code. 😉
         </p>
         
@@ -703,6 +719,9 @@
   <canvas id="confetti-canvas"></canvas>
 
   <script>
+    // Global detection variables
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
     /* ==========================================================================
        HEARTSYNC WEB AUDIO API SYNTHESIZER
        ========================================================================== */
@@ -791,7 +810,8 @@
           this.playBassNote(this.chords[this.chordIndex].bass, time);
         }
 
-        if (Math.random() > 0.6 && step % 2 === 0) {
+        const melodyChance = isMobile ? 0.72 : 0.6;
+        if (Math.random() > melodyChance && step % 2 === 0) {
           const chordNotes = this.chords[this.chordIndex].treble;
           const randomNote = chordNotes[Math.floor(Math.random() * chordNotes.length)];
           this.playMelodyNote(randomNote * 2, time);
@@ -963,7 +983,7 @@
         this.basket = {
           x: 0,
           y: 0,
-          width: 80,
+          width: isMobile ? 70 : 80,
           height: 18,
           targetX: 0
         };
@@ -972,7 +992,7 @@
         this.particles = [];
         
         this.lastSpawnTime = 0;
-        this.spawnInterval = 850;
+        this.spawnInterval = isMobile ? 950 : 850;
         this.baseSpeed = 2.4;
         
         this.setupListeners();
@@ -982,9 +1002,9 @@
       resizeCanvas() {
         const rect = this.canvas.parentNode.getBoundingClientRect();
         this.canvas.width = rect.width || 400;
-        this.canvas.height = 350;
+        this.canvas.height = Math.min(300, this.canvas.width * 0.72);
         
-        this.basket.y = this.canvas.height - 35;
+        this.basket.y = this.canvas.height - 30;
         this.basket.x = this.canvas.width / 2 - this.basket.width / 2;
         this.basket.targetX = this.basket.x;
       }
@@ -1019,7 +1039,9 @@
           handleMove(e.clientX);
         });
 
-        this.canvas.addEventListener('touchmove', (e) => {
+        const wrapper = this.canvas.parentNode;
+        wrapper.addEventListener('touchmove', (e) => {
+          if (!this.isActive) return;
           e.preventDefault();
           if (e.touches.length > 0) {
             handleMove(e.touches[0].clientX);
@@ -1041,7 +1063,8 @@
       }
 
       update(timestamp) {
-        this.basket.x += (this.basket.targetX - this.basket.x) * 0.22;
+        const easeFactor = isMobile ? 0.28 : 0.22;
+        this.basket.x += (this.basket.targetX - this.basket.x) * easeFactor;
         
         if (timestamp - this.lastSpawnTime > this.spawnInterval) {
           this.spawnItem();
@@ -1053,11 +1076,12 @@
           item.y += item.speed;
           item.angle += item.spin;
           
-          if (Math.random() > 0.6 && item.type !== 'cloud') {
+          const trailSpawnRate = isMobile ? 0.8 : 0.6;
+          if (Math.random() > trailSpawnRate && item.type !== 'cloud') {
             this.particles.push({
               x: item.x,
               y: item.y,
-              size: Math.random() * 3 + 1,
+              size: Math.random() * 2.5 + 0.8,
               color: item.type === 'heart' ? 'hsla(340, 100%, 75%, 0.7)' : 'hsla(45, 100%, 70%, 0.7)',
               vx: (Math.random() - 0.5) * 0.8,
               vy: Math.random() * 0.5,
@@ -1080,7 +1104,7 @@
           const particle = this.particles[p];
           particle.x += particle.vx;
           particle.y += particle.vy;
-          particle.alpha -= 0.02;
+          particle.alpha -= isMobile ? 0.03 : 0.02;
           
           if (particle.alpha <= 0) {
             this.particles.splice(p, 1);
@@ -1108,7 +1132,7 @@
           x,
           y: -20,
           type,
-          size: type === 'star' ? 14 : 16,
+          size: type === 'star' ? 13 : 15,
           speed,
           angle: Math.random() * Math.PI,
           spin: (Math.random() - 0.5) * 0.04
@@ -1143,16 +1167,17 @@
           scoreGain = 5;
           loveGain = 10;
           loveSynth.playCatch();
-          this.createBurst(item.x, item.y, 'hsla(340, 90%, 65%, 1)', 12);
+          this.createBurst(item.x, item.y, 'hsla(340, 90%, 65%, 1)', isMobile ? 6 : 12);
         } else if (item.type === 'star') {
           scoreGain = 15;
           loveGain = 15;
           loveSynth.playCatch();
-          this.createBurst(item.x, item.y, 'hsla(45, 100%, 60%, 1)', 16);
+          this.createBurst(item.x, item.y, 'hsla(45, 100%, 60%, 1)', isMobile ? 8 : 16);
         } else if (item.type === 'cloud') {
           loveGain = -10;
           loveSynth.playCloudStrike();
-          this.createBurst(item.x, item.y, 'rgba(120, 120, 150, 0.8)', 8);
+          this.createBurst(item.x, item.y, 'rgba(120, 120, 150, 0.8)', isMobile ? 4 : 8);
+          
           this.canvas.parentNode.classList.add('hit-cloud');
           setTimeout(() => this.canvas.parentNode.classList.remove('hit-cloud'), 400);
         }
@@ -1170,11 +1195,11 @@
       createBurst(x, y, color, count) {
         for (let i = 0; i < count; i++) {
           const angle = Math.random() * Math.PI * 2;
-          const speed = Math.random() * 3.5 + 1.5;
+          const speed = Math.random() * 3 + 1.2;
           this.particles.push({
             x,
             y,
-            size: Math.random() * 4 + 1.5,
+            size: Math.random() * 3.5 + 1.2,
             color,
             vx: Math.cos(angle) * speed,
             vy: Math.sin(angle) * speed - 0.5,
@@ -1480,7 +1505,7 @@
         p.className = 'heart-particle';
         p.textContent = particleSymbols[Math.floor(Math.random() * particleSymbols.length)];
         
-        const size = Math.random() * 20 + 12;
+        const size = Math.random() * (isMobile ? 14 : 20) + 12;
         const left = Math.random() * 100;
         const duration = Math.random() * 6 + 6;
         const driftX = (Math.random() - 0.5) * 150;
@@ -1498,11 +1523,13 @@
         }, duration * 1000);
       };
 
-      for (let i = 0; i < 10; i++) {
+      const initialParticlesCount = isMobile ? 5 : 10;
+      for (let i = 0; i < initialParticlesCount; i++) {
         spawnParticle();
       }
       
-      setInterval(spawnParticle, 1200);
+      const spawnIntervalTime = isMobile ? 2000 : 1200;
+      setInterval(spawnParticle, spawnIntervalTime);
     }
 
     function initRunawayButton() {
@@ -1513,7 +1540,7 @@
         
         noBtn.style.position = 'absolute';
         
-        const margin = 20;
+        const margin = 15;
         const maxX = cardRect.width - btnRect.width - margin * 2;
         const maxY = cardRect.height - btnRect.height - margin * 2;
         
@@ -1526,9 +1553,10 @@
         
         const distX = Math.abs(newX - yesRelX);
         const distY = Math.abs(newY - yesRelY);
-        if (distX < 90 && distY < 50) {
-          newX = (newX + 150) % maxX;
-          newY = (newY + 100) % maxY;
+        
+        if (distX < 85 && distY < 45) {
+          newX = (newX + 130) % maxX;
+          newY = (newY + 90) % maxY;
         }
         
         noBtn.style.left = `${newX}px`;
@@ -1560,15 +1588,18 @@
       confettiActive = true;
       confettiParticles = [];
       
-      for (let i = 0; i < 150; i++) {
+      const burstCount = isMobile ? 65 : 150;
+      for (let i = 0; i < burstCount; i++) {
         spawnConfettiParticle(true);
       }
       
+      const intervalDelay = isMobile ? 220 : 100;
       confettiTimer = setInterval(() => {
-        if (confettiParticles.length < 250) {
+        const maxParticles = isMobile ? 90 : 250;
+        if (confettiParticles.length < maxParticles) {
           spawnConfettiParticle(false);
         }
-      }, 100);
+      }, intervalDelay);
 
       window.addEventListener('resize', resizeConfettiCanvas);
       requestAnimationFrame(confettiLoop);
@@ -1599,10 +1630,10 @@
       confettiParticles.push({
         x: Math.random() * window.innerWidth,
         y: isInitialBurst ? Math.random() * window.innerHeight - window.innerHeight : -20,
-        r: Math.random() * 6 + 4,
+        r: Math.random() * 5 + 3,
         color: colors[Math.floor(Math.random() * colors.length)],
-        vx: (Math.random() - 0.5) * 4,
-        vy: Math.random() * 4 + 2,
+        vx: (Math.random() - 0.5) * 3.5,
+        vy: Math.random() * 3 + 2,
         spin: Math.random() * 0.2 - 0.1,
         rotation: Math.random() * Math.PI
       });
