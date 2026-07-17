@@ -1,1731 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Hi Rissum! ✨</title>
-  <!-- Google Fonts for romantic, cute, and premium typography -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Pacifico&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
-  
-  <style>
-    /* ==========================================================================
-       HEARTSYNC CORE DESIGN SYSTEM & STYLESHEETS
-       ========================================================================== */
-
-    :root {
-      --font-sans: 'Outfit', sans-serif;
-      --font-romantic: 'Pacifico', cursive;
-      --font-serif: 'Playfair Display', serif;
-
-      --bg-gradient: radial-gradient(circle at 50% 50%, hsl(280, 45%, 12%) 0%, hsl(240, 50%, 6%) 100%);
-      --primary-glow: rgba(244, 63, 94, 0.4);
-      --secondary-glow: rgba(168, 85, 247, 0.4);
-      
-      --color-pink: hsl(340, 82%, 60%);
-      --color-pink-light: hsl(340, 100%, 75%);
-      --color-pink-glow: hsl(340, 82%, 52%);
-      --color-purple: hsl(270, 76%, 54%);
-      --color-gold: hsl(45, 100%, 60%);
-      --color-white: hsl(0, 0%, 100%);
-      --color-dark: hsl(240, 50%, 5%);
-
-      --glass-bg: rgba(20, 10, 30, 0.45);
-      --glass-border: rgba(255, 255, 255, 0.08);
-      --glass-highlight: rgba(255, 255, 255, 0.15);
-      
-      --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-      --transition-fast: all 0.2s ease;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent; /* Disable tap highlight box on mobile */
-    }
-
-    body {
-      font-family: var(--font-sans);
-      background: var(--color-dark);
-      background-image: var(--bg-gradient);
-      color: var(--color-white);
-      min-height: 100vh;
-      min-height: 100dvh; /* Modern viewport height to fix mobile browser bar resize */
-      overflow-x: hidden;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* BACKGROUND FLOATING PARTICLES */
-    #particles-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      height: 100dvh;
-      z-index: 1;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .heart-particle {
-      position: absolute;
-      color: var(--color-pink);
-      filter: drop-shadow(0 0 5px var(--primary-glow));
-      animation: floatUp 10s linear infinite;
-      opacity: 0;
-      will-change: transform, opacity;
-    }
-
-    @keyframes floatUp {
-      0% {
-        transform: translateY(105vh) translateX(0) rotate(0deg) scale(0.6);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.7;
-      }
-      90% {
-        opacity: 0.7;
-      }
-      100% {
-        transform: translateY(-10vh) translateX(var(--drift-x, 50px)) rotate(var(--spin, 360deg)) scale(1.2);
-        opacity: 0;
-      }
-    }
-
-    /* FLOATING INTERFACE (PLACED BOTTOM LEFT TO AVOID TOUCH INTERFERENCE) */
-    .floating-btn {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      top: auto;
-      right: auto;
-      z-index: 100;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 50px;
-      padding: 8px 16px;
-      color: var(--color-white);
-      font-family: var(--font-sans);
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      transition: var(--transition-smooth);
-    }
-
-    .floating-btn:hover {
-      background: var(--glass-highlight);
-      border-color: rgba(244, 63, 94, 0.4);
-      box-shadow: 0 6px 20px rgba(244, 63, 94, 0.25);
-      transform: translateY(-2px);
-    }
-
-    .music-icon {
-      fill: var(--color-pink);
-    }
-
-    .icon-playing {
-      animation: pulse-music 1.2s ease-in-out infinite alternate;
-    }
-
-    @keyframes pulse-music {
-      0% { transform: scale(0.85); filter: drop-shadow(0 0 1px var(--color-pink)); }
-      100% { transform: scale(1.15); filter: drop-shadow(0 0 6px var(--color-pink-light)); }
-    }
-
-    /* LAYOUT SCREEN SYSTEM */
-    #app-container {
-      width: 90%;
-      max-width: 900px;
-      min-height: 480px;
-      z-index: 10;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 40px auto;
-    }
-
-    .screen {
-      display: none;
-      width: 100%;
-      opacity: 0;
-      transform: scale(0.97) translateY(10px);
-      transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-      will-change: opacity, transform;
-    }
-
-    .screen.active {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .screen.visible {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-    }
-
-    /* GLASSMORPHISM CARD STYLING */
-    .glass-card {
-      width: 100%;
-      max-width: 500px;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      padding: 40px 30px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(168, 85, 247, 0.1);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.5s ease;
-    }
-
-    .glass-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -50%;
-      width: 200%;
-      height: 100%;
-      background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.03) 50%,
-        rgba(255, 255, 255, 0) 100%
-      );
-      transform: rotate(25deg);
-      pointer-events: none;
-    }
-
-    /* TYPOGRAPHY & DECORATIONS */
-    .romantic-title {
-      font-family: var(--font-romantic);
-      font-size: 2.8rem;
-      color: var(--color-white);
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.2), 0 0 20px var(--primary-glow);
-      margin-bottom: 15px;
-      font-weight: normal;
-    }
-
-    .pink-glow {
-      text-shadow: 0 0 12px var(--color-pink-glow), 0 0 25px var(--color-pink);
-      color: var(--color-pink-light);
-    }
-
-    .font-romantic {
-      font-family: var(--font-romantic);
-    }
-
-    .font-numeric {
-      font-family: var(--font-sans);
-      font-weight: 800;
-    }
-
-    .text-center { text-align: center; }
-
-    /* INPUTS & BUTTONS */
-    .secondary-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--glass-border);
-      border-radius: 14px;
-      padding: 12px 25px;
-      color: rgba(255, 255, 255, 0.85);
-      font-family: var(--font-sans);
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 25px;
-      min-height: 44px; /* Touch target minimum */
-      transition: var(--transition-fast);
-    }
-
-    .secondary-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
-      color: var(--color-white);
-    }
-
-    .pulse-glow {
-      animation: pulse-glow-anim 2s infinite alternate;
-    }
-
-    @keyframes pulse-glow-anim {
-      0% { box-shadow: 0 4px 15px rgba(244, 63, 94, 0.25); }
-      100% { box-shadow: 0 8px 30px rgba(244, 63, 94, 0.55), 0 0 15px rgba(168, 85, 247, 0.3); }
-    }
-
-    /* SCREEN 1: GAME SCREEN & HUD */
-    .game-card {
-      max-width: 550px;
-    }
-
-    /* Screen shake class when hitting cloud */
-    .game-card.hit-cloud {
-      animation: cardShake 0.4s ease;
-    }
-
-    @keyframes cardShake {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-8px); }
-      40%, 80% { transform: translateX(8px); }
-    }
-
-    .game-hud {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 15px;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 12px;
-      padding: 10px 18px;
-      border: 1px solid rgba(255, 255, 255, 0.03);
-    }
-
-    .hud-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .hud-label {
-      font-size: 0.7rem;
-      color: rgba(255, 255, 255, 0.5);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .hud-value {
-      font-size: 1.2rem;
-      font-weight: 600;
-    }
-
-    .love-meter-container {
-      margin-bottom: 20px;
-    }
-
-    .love-meter-label {
-      font-size: 0.85rem;
-      margin-bottom: 6px;
-      text-align: left;
-      display: flex;
-      justify-content: space-between;
-      font-weight: 600;
-    }
-
-    #love-percent {
-      color: var(--color-pink-light);
-      text-shadow: 0 0 5px var(--primary-glow);
-    }
-
-    .love-meter-track {
-      width: 100%;
-      height: 12px;
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 50px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .love-meter-fill {
-      width: 0%;
-      height: 100%;
-      background: linear-gradient(90deg, var(--color-purple) 0%, var(--color-pink) 100%);
-      box-shadow: 0 0 10px var(--primary-glow);
-      border-radius: 50px;
-      transition: width 0.3s cubic-bezier(0.1, 0.8, 0.2, 1);
-    }
-
-    .game-instruction {
-      font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.7);
-      margin-bottom: 12px;
-    }
-
-    .canvas-wrapper {
-      background: rgba(0, 0, 0, 0.35);
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      overflow: hidden;
-      position: relative;
-      touch-action: none; /* Block browser swipe-to-scroll gestures */
-    }
-
-    #game-canvas {
-      display: block;
-      width: 100%;
-      height: auto;
-      max-width: 100%;
-      cursor: none;
-    }
-
-    /* MOBILE CONTROL PAD ZONE */
-    .touch-control-zone {
-      width: 100%;
-      height: 64px;
-      background: rgba(0, 0, 0, 0.45);
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      margin-top: 15px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.02);
-      touch-action: none;
-      cursor: ew-resize;
-    }
-
-    .control-pad-line {
-      width: 78%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--color-pink), var(--color-purple), var(--color-pink), transparent);
-      opacity: 0.55;
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .control-text {
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: rgba(255, 255, 255, 0.45);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      z-index: 2;
-      background: #180d28; /* Match Twilight overlay */
-      padding: 3px 12px;
-      border-radius: 50px;
-      border: 1px solid rgba(255, 255, 255, 0.03);
-    }
-
-    /* SCREEN 2: PROPOSAL SCREEN & RUNAWAY BUTTON */
-    .proposal-card {
-      max-width: 550px;
-    }
-
-    .proposal-visual {
-      height: 100px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-
-    .heart-pulse-container {
-      position: relative;
-      width: 90px;
-      height: 90px;
-    }
-
-    .main-pulsing-heart {
-      font-size: 3.5rem;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 5;
-      animation: heartPulse 1s ease-in-out infinite alternate;
-    }
-
-    .heart-ring {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 50px;
-      height: 50px;
-      border: 2px solid var(--color-pink);
-      border-radius: 50%;
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 0.8;
-      z-index: 1;
-    }
-
-    .ring-1 { animation: ripple 2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; }
-    .ring-2 { animation: ripple 2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; animation-delay: 0.6s; }
-    .ring-3 { animation: ripple 2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; animation-delay: 1.2s; }
-
-    @keyframes heartPulse {
-      0% { transform: translate(-50%, -50%) scale(0.9); filter: drop-shadow(0 0 5px var(--primary-glow)); }
-      100% { transform: translate(-50%, -50%) scale(1.1); filter: drop-shadow(0 0 15px var(--color-pink)); }
-    }
-
-    @keyframes ripple {
-      0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-      100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
-    }
-
-    .proposal-text {
-      font-size: 1rem;
-      line-height: 1.6;
-      color: rgba(255,255,255,0.9);
-      margin-bottom: 15px;
-    }
-
-    .proposal-question {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: var(--color-pink-light);
-      margin-bottom: 25px;
-      text-shadow: 0 0 8px var(--primary-glow);
-    }
-
-    .button-choice-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 30px;
-      position: relative;
-      min-height: 110px; /* Taller area so button can dodge freely without jumping off screen */
-      width: 100%;
-    }
-
-    .yes-btn {
-      background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
-      border: none;
-      border-radius: 12px;
-      padding: 12px 40px;
-      color: var(--color-white);
-      font-family: var(--font-sans);
-      font-size: 1.2rem;
-      font-weight: 800;
-      cursor: pointer;
-      min-height: 48px; /* Tapping area size */
-      box-shadow: 0 4px 15px rgba(255, 75, 43, 0.3);
-      transition: transform 0.2s ease;
-      z-index: 10;
-    }
-
-    .pulse-grow {
-      animation: pulse-grow-anim 1.5s ease-in-out infinite alternate;
-    }
-
-    @keyframes pulse-grow-anim {
-      0% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 75, 43, 0.3); }
-      100% { transform: scale(1.06); box-shadow: 0 8px 25px rgba(255, 75, 43, 0.6), 0 0 15px var(--color-pink-glow); }
-    }
-
-    .no-btn {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 12px;
-      padding: 12px 40px;
-      color: rgba(255, 255, 255, 0.7);
-      font-family: var(--font-sans);
-      font-size: 1.05rem;
-      font-weight: 500;
-      cursor: pointer;
-      min-height: 48px;
-      transition: transform 0.15s cubic-bezier(0.25, 0.8, 0.25, 1), left 0.15s cubic-bezier(0.25, 0.8, 0.25, 1), top 0.15s cubic-bezier(0.25, 0.8, 0.25, 1);
-      z-index: 10;
-      position: relative;
-    }
-
-    /* SCREEN 3: SUCCESS FUNNY PANEL */
-    .success-card {
-      max-width: 500px;
-      padding: 40px 25px;
-    }
-
-    .success-header {
-      margin-bottom: 15px;
-    }
-
-    .celebration-emojis {
-      font-size: 2rem;
-      margin-bottom: 8px;
-      animation: throw-up 1s ease-out;
-    }
-
-    @keyframes throw-up {
-      0% { transform: translateY(20px) scale(0.5); opacity: 0; }
-      60% { transform: translateY(-10px) scale(1.1); }
-      100% { transform: translateY(0) scale(1); opacity: 1; }
-    }
-
-    .funny-box {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px dashed rgba(244, 63, 94, 0.3);
-      border-radius: 16px;
-      padding: 20px;
-      text-align: left;
-      box-shadow: inset 0 0 15px rgba(244, 63, 94, 0.05);
-      margin-bottom: 5px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .funny-line {
-      font-size: 0.98rem;
-      line-height: 1.5;
-      color: rgba(255, 255, 255, 0.9);
-      border-left: 3px solid transparent;
-      padding-left: 10px;
-    }
-
-    .funny-line:nth-child(1) {
-      border-left-color: var(--color-pink-light);
-    }
-    .funny-line:nth-child(2) {
-      border-left-color: var(--color-purple);
-    }
-    .funny-line:nth-child(3) {
-      border-left-color: var(--color-gold);
-      color: var(--color-pink-light);
-      font-weight: 600;
-      text-shadow: 0 0 10px rgba(244, 63, 94, 0.15);
-    }
-
-    #confetti-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      height: 100dvh;
-      z-index: 99;
-      pointer-events: none;
-      display: none;
-    }
-
-    /* RESPONSIVE DESIGN & MOBILE FIXES (PUSH CARD UP & ADJUST FLOATING MUSIC BUTTON) */
-    @media (max-width: 600px) {
-      body {
-        align-items: flex-start; /* Push layout container up */
-      }
-
-      #app-container {
-        margin: 25px auto 0 auto; /* Small top margin, leaving bottom area empty for thumbs */
-        width: 92%;
-      }
-
-      .floating-btn {
-        bottom: 15px; /* Floating mute button placed at bottom-left */
-        left: 15px;
-        top: auto;
-        right: auto;
-        padding: 8px 14px;
-        font-size: 0.75rem;
-      }
-
-      .glass-card {
-        padding: 24px 18px;
-        border-radius: 20px;
-      }
-
-      .romantic-title {
-        font-size: 2.1rem;
-      }
-
-      .button-choice-container {
-        gap: 15px;
-        min-height: 120px;
-      }
-
-      .yes-btn, .no-btn {
-        padding: 10px 25px;
-        font-size: 0.95rem;
-        min-height: 48px;
-      }
-
-      .funny-line {
-        font-size: 0.9rem;
-      }
-
-      .proposal-text {
-        font-size: 0.92rem;
-        line-height: 1.5;
-      }
-
-      .proposal-question {
-        font-size: 1.05rem;
-        margin-bottom: 15px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Rissum | The Most Beautiful Girl</title>
+    <meta name="description" content="A magical, interactive birthday tribute for Rissum, the most beautiful girl in the universe.">
+    <!-- Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Background Canvas for Particles/Glitter/Hearts -->
+    <canvas id="sparkle-canvas"></canvas>
 
-  <!-- Floating particles in the background -->
-  <div id="particles-container"></div>
+    <!-- Audio Player Controller (Procedural Piano Synth) -->
+    <div id="music-player-container" class="hidden">
+        <button id="music-toggle" aria-label="Toggle Background Music">
+            <svg class="play-icon" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+            </svg>
+            <svg class="pause-icon hidden" viewBox="0 0 24 24">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+            <span class="music-text">Play Music</span>
+        </button>
+    </div>
 
-  <!-- Music toggle button positioned floating at bottom-left -->
-  <button id="music-toggle" class="floating-btn" aria-label="Toggle Music">
-    <svg class="music-icon icon-playing" viewBox="0 0 24 24" width="20" height="20">
-      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-    </svg>
-    <span class="music-text">Play Music</span>
-  </button>
-
-  <!-- Main App Wrapper -->
-  <main id="app-container">
-
-    <!-- SCREEN 1: GAME SCREEN (ACTIVE BY DEFAULT) -->
-    <section id="game-screen" class="screen active visible">
-      <div class="glass-card game-card">
-        <div class="game-hud">
-          <div class="hud-item">
-            <span class="hud-label">Player:</span>
-            <span id="player-display-name" class="hud-value font-romantic">Rissum</span>
-          </div>
-          <div class="hud-item">
-            <span class="hud-label">Score:</span>
-            <span id="game-score" class="hud-value font-numeric">0</span>
-          </div>
+    <!-- STAGE 1: The Sealed Envelope (Entrance Page) -->
+    <div id="entrance-container" class="active">
+        <div class="envelope-wrapper">
+            <div class="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-pocket"></div>
+                <div class="letter-preview">
+                    <h3>To: Rissum</h3>
+                    <p>The girl who outshines the stars...</p>
+                    <span class="tap-hint">Click the heart to open your gift</span>
+                </div>
+                <div class="envelope-seal" id="open-envelope-btn">
+                    <svg viewBox="0 0 24 24" class="heart-seal-icon">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </div>
+            </div>
+            <h1 class="envelope-title-outside">For the Most Beautiful Girl in the Universe</h1>
         </div>
-
-        <div class="love-meter-container">
-          <div class="love-meter-label">Love Level: <span id="love-percent">0%</span></div>
-          <div class="love-meter-track">
-            <div id="love-meter-bar" class="love-meter-fill"></div>
-          </div>
-        </div>
-
-        <h2 class="section-title text-center" style="margin-bottom: 5px;">Catch My Hearts! 💕</h2>
-        <p class="game-instruction">Slide your finger left/right to catch the falling hearts. Don't catch the rain clouds!</p>
-
-        <!-- Canvas for the catching game -->
-        <div class="canvas-wrapper">
-          <canvas id="game-canvas" width="400" height="300"></canvas>
-        </div>
-
-        <!-- DEDICATED CONTROL PAD TO PREVENT FINGER FROM COVERING BASKET -->
-        <div class="touch-control-zone">
-          <div class="control-pad-line"></div>
-          <span class="control-text">👈 CONTROL PAD 👉</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- SCREEN 2: PROPOSAL SCREEN -->
-    <section id="proposal-screen" class="screen">
-      <div class="glass-card proposal-card">
-        <div class="proposal-visual">
-          <div class="heart-pulse-container">
-            <div class="heart-ring ring-1"></div>
-            <div class="heart-ring ring-2"></div>
-            <div class="heart-ring ring-3"></div>
-            <div class="main-pulsing-heart">💖</div>
-          </div>
-        </div>
-
-        <h2 class="romantic-title text-center">I have a message for you, <span id="proposal-name" class="font-romantic">Rissum</span>...</h2>
-        
-        <p class="proposal-text">
-          I built this entire heart-catching digital laboratory just to state the obvious: your beauty is getting criminally out of hand. Honestly, it's a major safety hazard. ⚠️
-        </p>
-        
-        <p class="proposal-text" style="margin-bottom: 25px;">
-          My eyes literally lag trying to process how someone can look this cute. Scientists are still debating if you are a real human or just a cheat code for perfect aesthetic settings. I'm leaning towards cheat code. 😉
-        </p>
-        
-        <p class="proposal-question">Do you want to open my special message for you? 💌</p>
-
-        <div class="button-choice-container">
-          <button id="yes-btn" class="yes-btn pulse-grow">Open it! 💘</button>
-          <button id="no-btn" class="no-btn">No 🥺</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- SCREEN 3: SUCCESS FUNNY PANEL -->
-    <section id="success-screen" class="screen">
-      <div class="glass-card success-card">
-        <div class="success-header">
-          <div class="celebration-emojis">🎉🥳💖✨💘</div>
-          <h1 class="romantic-title pink-glow">Hi Rissum! 👋💖</h1>
-        </div>
-
-        <div class="funny-box">
-          <p class="funny-line">🎉 Congrats! You caught 100% of my hearts, although your face does that on autopilot without even trying. 🕵️‍♀️💘</p>
-          <p class="funny-line">⚠️ WARNING: Being this pretty comes with the high risk of me building more weird interactive games for you.</p>
-          <p class="funny-line">✨ P.S. Make sure to check this page regularly for cute surprises (and more updates of me complaining about how cute you are)! 😉</p>
-        </div>
-
-        <button id="reset-btn" class="secondary-btn">Play Again ✨</button>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Confetti canvas for victory blast -->
-  <canvas id="confetti-canvas"></canvas>
-
-  <script>
-    // Global detection variables
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-    /* ==========================================================================
-       HEARTSYNC WEB AUDIO API SYNTHESIZER
-       ========================================================================== */
-
-    class LoveSynth {
-      constructor() {
-        this.ctx = null;
-        this.isPlaying = false;
-        this.scheduleTimeout = null;
-        
-        this.tempo = 75; // BPM
-        this.beatDuration = 60 / this.tempo;
-        this.currentStep = 0;
-        this.nextNoteTime = 0.0;
-        
-        this.chords = [
-          { root: 'F', bass: 41.20, treble: [174.61, 220.00, 261.63, 329.63] }, // Fmaj7
-          { root: 'G', bass: 49.00, treble: [196.00, 246.94, 293.66, 392.00] }, // G6
-          { root: 'E', bass: 41.20, treble: [164.81, 196.00, 246.94, 293.66] }, // Em7
-          { root: 'A', bass: 55.00, treble: [220.00, 261.63, 329.63, 392.00] }  // Am7
-        ];
-        this.chordIndex = 0;
-      }
-
-      init() {
-        if (!this.ctx) {
-          this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-          
-          this.mainGain = this.ctx.createGain();
-          this.mainGain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-          
-          this.filter = this.ctx.createBiquadFilter();
-          this.filter.type = 'lowpass';
-          this.filter.frequency.setValueAtTime(800, this.ctx.currentTime);
-          
-          this.mainGain.connect(this.filter);
-          this.filter.connect(this.ctx.destination);
-        }
-        
-        if (this.ctx.state === 'suspended') {
-          this.ctx.resume();
-        }
-      }
-
-      toggle() {
-        this.init();
-        if (this.isPlaying) {
-          this.stop();
-        } else {
-          this.start();
-        }
-        return this.isPlaying;
-      }
-
-      start() {
-        this.isPlaying = true;
-        this.nextNoteTime = this.ctx.currentTime;
-        this.scheduler();
-      }
-
-      stop() {
-        this.isPlaying = false;
-        clearTimeout(this.scheduleTimeout);
-      }
-
-      scheduler() {
-        while (this.nextNoteTime < this.ctx.currentTime + 0.1) {
-          this.playBeat(this.currentStep, this.nextNoteTime);
-          this.advanceBeat();
-        }
-        this.scheduleTimeout = setTimeout(() => this.scheduler(), 25);
-      }
-
-      advanceBeat() {
-        this.currentStep = (this.currentStep + 1) % 16;
-        this.nextNoteTime += this.beatDuration * 0.5;
-      }
-
-      playBeat(step, time) {
-        if (step % 8 === 0) {
-          this.chordIndex = (this.chordIndex + 1) % this.chords.length;
-          this.playPadChord(this.chords[this.chordIndex], time);
-        }
-        
-        if (step === 0 || step === 8) {
-          this.playBassNote(this.chords[this.chordIndex].bass, time);
-        }
-
-        const melodyChance = isMobile ? 0.72 : 0.6;
-        if (Math.random() > melodyChance && step % 2 === 0) {
-          const chordNotes = this.chords[this.chordIndex].treble;
-          const randomNote = chordNotes[Math.floor(Math.random() * chordNotes.length)];
-          this.playMelodyNote(randomNote * 2, time);
-        }
-      }
-
-      playPadChord(chord, time) {
-        const duration = this.beatDuration * 4;
-        chord.treble.forEach((freq) => {
-          const osc = this.ctx.createOscillator();
-          const gainNode = this.ctx.createGain();
-          
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, time);
-          
-          gainNode.gain.setValueAtTime(0, time);
-          gainNode.gain.linearRampToValueAtTime(0.04, time + 1.2);
-          gainNode.gain.setValueAtTime(0.04, time + duration - 0.5);
-          gainNode.gain.exponentialRampToValueAtTime(0.0001, time + duration);
-          
-          osc.connect(gainNode);
-          gainNode.connect(this.mainGain);
-          
-          osc.start(time);
-          osc.stop(time + duration);
-        });
-      }
-
-      playBassNote(freq, time) {
-        const duration = this.beatDuration * 3;
-        const osc = this.ctx.createOscillator();
-        const gainNode = this.ctx.createGain();
-        
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, time);
-        
-        gainNode.gain.setValueAtTime(0, time);
-        gainNode.gain.linearRampToValueAtTime(0.08, time + 0.3);
-        gainNode.gain.setValueAtTime(0.08, time + duration - 0.5);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, time + duration);
-        
-        osc.connect(gainNode);
-        gainNode.connect(this.mainGain);
-        
-        osc.start(time);
-        osc.stop(time + duration);
-      }
-
-      playMelodyNote(freq, time) {
-        const osc = this.ctx.createOscillator();
-        const gainNode = this.ctx.createGain();
-        
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, time);
-        
-        gainNode.gain.setValueAtTime(0, time);
-        gainNode.gain.linearRampToValueAtTime(0.06, time + 0.05);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, time + 1.5);
-        
-        const lfo = this.ctx.createOscillator();
-        const lfoGain = this.ctx.createGain();
-        lfo.type = 'sine';
-        lfo.frequency.setValueAtTime(4.5, time);
-        lfoGain.gain.setValueAtTime(3, time);
-        
-        lfo.connect(lfoGain);
-        lfoGain.connect(osc.frequency);
-        
-        osc.connect(gainNode);
-        gainNode.connect(this.mainGain);
-        
-        lfo.start(time);
-        osc.start(time);
-        lfo.stop(time + 1.6);
-        osc.stop(time + 1.6);
-      }
-
-      playCatch() {
-        if (!this.ctx) return;
-        this.init();
-        
-        const now = this.ctx.currentTime;
-        const chimeFreqs = [523.25, 659.25];
-        
-        chimeFreqs.forEach((freq, idx) => {
-          const osc = this.ctx.createOscillator();
-          const gainNode = this.ctx.createGain();
-          
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, now + idx * 0.08);
-          
-          gainNode.gain.setValueAtTime(0, now + idx * 0.08);
-          gainNode.gain.linearRampToValueAtTime(0.12, now + idx * 0.08 + 0.02);
-          gainNode.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.08 + 0.4);
-          
-          osc.connect(gainNode);
-          gainNode.connect(this.filter);
-          
-          osc.start(now + idx * 0.08);
-          osc.stop(now + idx * 0.08 + 0.45);
-        });
-      }
-
-      playCloudStrike() {
-        if (!this.ctx) return;
-        this.init();
-        
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gainNode = this.ctx.createGain();
-        
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(120, now);
-        osc.frequency.linearRampToValueAtTime(70, now + 0.35);
-        
-        gainNode.gain.setValueAtTime(0.15, now);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
-        
-        osc.connect(gainNode);
-        gainNode.connect(this.filter);
-        
-        osc.start(now);
-        osc.stop(now + 0.45);
-      }
-
-      playSuccessFanfare() {
-        if (!this.ctx) return;
-        this.init();
-        
-        const now = this.ctx.currentTime;
-        const arpeggio = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
-        
-        arpeggio.forEach((freq, idx) => {
-          const osc = this.ctx.createOscillator();
-          const gainNode = this.ctx.createGain();
-          
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, now + idx * 0.12);
-          
-          gainNode.gain.setValueAtTime(0, now + idx * 0.12);
-          gainNode.gain.linearRampToValueAtTime(0.12, now + idx * 0.12 + 0.03);
-          gainNode.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.12 + 1.2);
-          
-          osc.connect(gainNode);
-          gainNode.connect(this.filter);
-          
-          osc.start(now + idx * 0.12);
-          osc.stop(now + idx * 0.12 + 1.3);
-        });
-      }
-    }
-
-    const loveSynth = new LoveSynth();
-
-    /* ==========================================================================
-       HEARTSYNC CANVAS GAME ENGINE
-       ========================================================================== */
-
-    class CatchGame {
-      constructor(canvasId, onVictory) {
-        this.canvas = document.getElementById(canvasId);
-        this.ctx = this.canvas.getContext('2d');
-        this.onVictory = onVictory;
-        
-        this.score = 0;
-        this.loveLevel = 0;
-        this.isActive = false;
-        
-        this.basket = {
-          x: 0,
-          y: 0,
-          width: isMobile ? 70 : 80,
-          height: 18,
-          targetX: 0
-        };
-        
-        this.items = [];
-        this.particles = [];
-        
-        this.lastSpawnTime = 0;
-        this.spawnInterval = isMobile ? 950 : 850;
-        this.baseSpeed = 2.4;
-        
-        this.setupListeners();
-        this.resizeCanvas();
-      }
-
-      resizeCanvas() {
-        const rect = this.canvas.parentNode.getBoundingClientRect();
-        this.canvas.width = rect.width || 400;
-        this.canvas.height = Math.min(300, this.canvas.width * 0.72);
-        
-        this.basket.y = this.canvas.height - 30;
-        this.basket.x = this.canvas.width / 2 - this.basket.width / 2;
-        this.basket.targetX = this.basket.x;
-      }
-
-      start() {
-        this.score = 0;
-        this.loveLevel = 0;
-        this.items = [];
-        this.particles = [];
-        this.isActive = true;
-        this.baseSpeed = 2.4;
-        this.updateHUD();
-        
-        this.resizeCanvas();
-        this.lastSpawnTime = performance.now();
-        requestAnimationFrame((t) => this.gameLoop(t));
-      }
-
-      stop() {
-        this.isActive = false;
-      }
-
-      setupListeners() {
-        const handleMove = (clientX) => {
-          if (!this.isActive) return;
-          const rect = this.canvas.getBoundingClientRect();
-          const relativeX = clientX - rect.left;
-          this.basket.targetX = Math.max(0, Math.min(this.canvas.width - this.basket.width, relativeX - this.basket.width / 2));
-        };
-
-        window.addEventListener('mousemove', (e) => {
-          handleMove(e.clientX);
-        });
-
-        // Touch event processor
-        const processTouch = (e) => {
-          if (!this.isActive) return;
-          e.preventDefault();
-          if (e.touches.length > 0) {
-            const rect = this.canvas.getBoundingClientRect();
-            const clientX = e.touches[0].clientX;
-            const relativeX = clientX - rect.left;
-            this.basket.targetX = Math.max(0, Math.min(this.canvas.width - this.basket.width, relativeX - this.basket.width / 2));
-          }
-        };
-
-        // Bind touch event to both the canvas wrapper AND the Control Pad
-        const wrapper = this.canvas.parentNode;
-        const touchZone = document.querySelector('.touch-control-zone');
-
-        wrapper.addEventListener('touchmove', processTouch, { passive: false });
-        wrapper.addEventListener('touchstart', processTouch, { passive: false });
-
-        if (touchZone) {
-          touchZone.addEventListener('touchmove', processTouch, { passive: false });
-          touchZone.addEventListener('touchstart', processTouch, { passive: false });
-        }
-
-        window.addEventListener('resize', () => {
-          this.resizeCanvas();
-        });
-      }
-
-      gameLoop(timestamp) {
-        if (!this.isActive) return;
-        
-        this.update(timestamp);
-        this.draw();
-        
-        requestAnimationFrame((t) => this.gameLoop(t));
-      }
-
-      update(timestamp) {
-        const easeFactor = isMobile ? 0.28 : 0.22;
-        this.basket.x += (this.basket.targetX - this.basket.x) * easeFactor;
-        
-        if (timestamp - this.lastSpawnTime > this.spawnInterval) {
-          this.spawnItem();
-          this.lastSpawnTime = timestamp;
-        }
-        
-        for (let i = this.items.length - 1; i >= 0; i--) {
-          const item = this.items[i];
-          item.y += item.speed;
-          item.angle += item.spin;
-          
-          const trailSpawnRate = isMobile ? 0.8 : 0.6;
-          if (Math.random() > trailSpawnRate && item.type !== 'cloud') {
-            this.particles.push({
-              x: item.x,
-              y: item.y,
-              size: Math.random() * 2.5 + 0.8,
-              color: item.type === 'heart' ? 'hsla(340, 100%, 75%, 0.7)' : 'hsla(45, 100%, 70%, 0.7)',
-              vx: (Math.random() - 0.5) * 0.8,
-              vy: Math.random() * 0.5,
-              alpha: 1
-            });
-          }
-
-          if (this.checkCollision(item)) {
-            this.handleCatch(item);
-            this.items.splice(i, 1);
-            continue;
-          }
-          
-          if (item.y > this.canvas.height + 20) {
-            this.items.splice(i, 1);
-          }
-        }
-
-        for (let p = this.particles.length - 1; p >= 0; p--) {
-          const particle = this.particles[p];
-          particle.x += particle.vx;
-          particle.y += particle.vy;
-          particle.alpha -= isMobile ? 0.03 : 0.02;
-          
-          if (particle.alpha <= 0) {
-            this.particles.splice(p, 1);
-          }
-        }
-      }
-
-      spawnItem() {
-        const rand = Math.random();
-        let type = 'heart';
-        let speed = this.baseSpeed + Math.random() * 1.2;
-        
-        if (rand > 0.85) {
-          type = 'star';
-          speed += 0.8;
-        } else if (rand > 0.68) {
-          type = 'cloud';
-          speed -= 0.4;
-        }
-        
-        const margin = 20;
-        const x = margin + Math.random() * (this.canvas.width - margin * 2);
-        
-        this.items.push({
-          x,
-          y: -20,
-          type,
-          size: type === 'star' ? 13 : 15,
-          speed,
-          angle: Math.random() * Math.PI,
-          spin: (Math.random() - 0.5) * 0.04
-        });
-
-        this.baseSpeed = 2.4 + Math.min(3, this.score * 0.04);
-      }
-
-      checkCollision(item) {
-        const itemLeft = item.x - item.size;
-        const itemRight = item.x + item.size;
-        const itemBottom = item.y + item.size / 2;
-        
-        const basketLeft = this.basket.x;
-        const basketRight = this.basket.x + this.basket.width;
-        const basketTop = this.basket.y;
-        const basketBottom = this.basket.y + this.basket.height;
-        
-        return (
-          itemBottom >= basketTop &&
-          itemBottom <= basketBottom &&
-          itemRight >= basketLeft &&
-          itemLeft <= basketRight
-        );
-      }
-
-      handleCatch(item) {
-        let scoreGain = 0;
-        let loveGain = 0;
-        
-        if (item.type === 'heart') {
-          scoreGain = 5;
-          loveGain = 10;
-          loveSynth.playCatch();
-          this.createBurst(item.x, item.y, 'hsla(340, 90%, 65%, 1)', isMobile ? 6 : 12);
-        } else if (item.type === 'star') {
-          scoreGain = 15;
-          loveGain = 15;
-          loveSynth.playCatch();
-          this.createBurst(item.x, item.y, 'hsla(45, 100%, 60%, 1)', isMobile ? 8 : 16);
-        } else if (item.type === 'cloud') {
-          loveGain = -10;
-          loveSynth.playCloudStrike();
-          this.createBurst(item.x, item.y, 'rgba(120, 120, 150, 0.8)', isMobile ? 4 : 8);
-          
-          this.canvas.parentNode.classList.add('hit-cloud');
-          setTimeout(() => this.canvas.parentNode.classList.remove('hit-cloud'), 400);
-        }
-        
-        this.score += scoreGain;
-        this.loveLevel = Math.max(0, Math.min(100, this.loveLevel + loveGain));
-        this.updateHUD();
-        
-        if (this.loveLevel >= 100) {
-          this.isActive = false;
-          setTimeout(() => this.onVictory(), 600);
-        }
-      }
-
-      createBurst(x, y, color, count) {
-        for (let i = 0; i < count; i++) {
-          const angle = Math.random() * Math.PI * 2;
-          const speed = Math.random() * 3 + 1.2;
-          this.particles.push({
-            x,
-            y,
-            size: Math.random() * 3.5 + 1.2,
-            color,
-            vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed - 0.5,
-            alpha: 1
-          });
-        }
-      }
-
-      updateHUD() {
-        document.getElementById('game-score').textContent = this.score;
-        document.getElementById('love-percent').textContent = `${this.loveLevel}%`;
-        document.getElementById('love-meter-bar').style.width = `${this.loveLevel}%`;
-      }
-
-      draw() {
-        this.ctx.fillStyle = 'rgba(15, 10, 25, 0.28)';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        this.drawGrid();
-
-        this.particles.forEach((p) => {
-          this.ctx.save();
-          this.ctx.globalAlpha = p.alpha;
-          this.ctx.fillStyle = p.color;
-          this.ctx.beginPath();
-          this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          this.ctx.fill();
-          this.ctx.restore();
-        });
-
-        this.items.forEach((item) => {
-          this.ctx.save();
-          this.ctx.translate(item.x, item.y);
-          this.ctx.rotate(item.angle);
-          
-          if (item.type === 'heart') {
-            this.drawHeart(0, 0, item.size);
-          } else if (item.type === 'star') {
-            this.drawStar(0, 0, 5, item.size, item.size / 2.3);
-          } else if (item.type === 'cloud') {
-            this.drawCloud(0, 0, item.size);
-          }
-          
-          this.ctx.restore();
-        });
-
-        this.drawBasket();
-      }
-
-      drawGrid() {
-        this.ctx.strokeStyle = 'rgba(244, 63, 94, 0.03)';
-        this.ctx.lineWidth = 1;
-        const size = 30;
-        
-        for (let x = 0; x < this.canvas.width; x += size) {
-          this.ctx.beginPath();
-          this.ctx.moveTo(x, 0);
-          this.ctx.lineTo(x, this.canvas.height);
-          this.ctx.stroke();
-        }
-        for (let y = 0; y < this.canvas.height; y += size) {
-          this.ctx.beginPath();
-          this.ctx.moveTo(0, y);
-          this.ctx.lineTo(this.canvas.width, y);
-          this.ctx.stroke();
-        }
-      }
-
-      drawHeart(cx, cy, size) {
-        this.ctx.fillStyle = 'hsl(340, 85%, 60%)';
-        this.ctx.shadowColor = 'rgba(244, 63, 94, 0.6)';
-        this.ctx.shadowBlur = 10;
-        
-        this.ctx.beginPath();
-        const topY = cy - size / 2.5;
-        this.ctx.moveTo(cx, topY + size / 4);
-        
-        this.ctx.bezierCurveTo(
-          cx - size / 2, topY, 
-          cx - size, topY + size / 3, 
-          cx, cy + size / 1.3
-        );
-        
-        this.ctx.bezierCurveTo(
-          cx + size, topY + size / 3, 
-          cx + size / 2, topY, 
-          cx, topY + size / 4
-        );
-        
-        this.ctx.fill();
-        this.ctx.shadowBlur = 0;
-      }
-
-      drawStar(cx, cy, spikes, outerRadius, innerRadius) {
-        let rot = Math.PI / 2 * 3;
-        let x = cx;
-        let y = cy;
-        const step = Math.PI / spikes;
-
-        this.ctx.fillStyle = 'hsl(45, 100%, 60%)';
-        this.ctx.shadowColor = 'rgba(255, 215, 0, 0.6)';
-        this.ctx.shadowBlur = 12;
-        
-        this.ctx.beginPath();
-        this.ctx.moveTo(cx, cy - outerRadius);
-        
-        for (let i = 0; i < spikes; i++) {
-          x = cx + Math.cos(rot) * outerRadius;
-          y = cy + Math.sin(rot) * outerRadius;
-          this.ctx.lineTo(x, y);
-          rot += step;
-
-          x = cx + Math.cos(rot) * innerRadius;
-          y = cy + Math.sin(rot) * innerRadius;
-          this.ctx.lineTo(x, y);
-          rot += step;
-        }
-        
-        this.ctx.lineTo(cx, cy - outerRadius);
-        this.ctx.closePath();
-        this.ctx.fill();
-        this.ctx.shadowBlur = 0;
-      }
-
-      drawCloud(cx, cy, size) {
-        this.ctx.fillStyle = 'rgba(110, 115, 140, 0.85)';
-        this.ctx.beginPath();
-        
-        const r = size / 2.2;
-        this.ctx.arc(cx - r, cy, r, Math.PI * 0.5, Math.PI * 1.5);
-        this.ctx.arc(cx, cy - r, r * 1.2, Math.PI * 1.0, Math.PI * 2.0);
-        this.ctx.arc(cx + r, cy, r, Math.PI * 1.5, Math.PI * 0.5);
-        this.ctx.closePath();
-        
-        this.ctx.fill();
-      }
-
-      drawBasket() {
-        this.ctx.save();
-        this.ctx.shadowColor = 'rgba(244, 63, 94, 0.4)';
-        this.ctx.shadowBlur = 15;
-        
-        const grad = this.ctx.createLinearGradient(
-          this.basket.x, this.basket.y, 
-          this.basket.x + this.basket.width, this.basket.y
-        );
-        grad.addColorStop(0, 'hsl(270, 76%, 54%)');
-        grad.addColorStop(0.5, 'hsl(340, 82%, 60%)');
-        grad.addColorStop(1, 'hsl(270, 76%, 54%)');
-        
-        this.ctx.fillStyle = grad;
-        this.ctx.beginPath();
-        this.ctx.roundRect(
-          this.basket.x, 
-          this.basket.y, 
-          this.basket.width, 
-          this.basket.height, 
-          [10]
-        );
-        this.ctx.fill();
-        
-        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-        this.ctx.lineWidth = 2;
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.basket.x + 8, this.basket.y + 2);
-        this.ctx.lineTo(this.basket.x + this.basket.width - 8, this.basket.y + 2);
-        this.ctx.stroke();
-
-        this.ctx.fillStyle = '#fff';
-        this.ctx.shadowBlur = 0;
-        this.ctx.font = '12px Outfit';
-        this.ctx.textAlign = 'center';
-        this.ctx.textBaseline = 'middle';
-        this.ctx.fillText('💖', this.basket.x + this.basket.width / 2, this.basket.y + this.basket.height / 2);
-        
-        this.ctx.restore();
-      }
-    }
-
-    /* ==========================================================================
-       APP NAVIGATION & INTERACTIVE BINDINGS
-       ========================================================================== */
-
-    const username = 'Rissum';
-    let game = null;
-    let musicInitialized = false;
-
-    const screens = document.querySelectorAll('.screen');
-    const musicToggleBtn = document.getElementById('music-toggle');
-    const musicText = musicToggleBtn.querySelector('.music-text');
-    const musicIcon = musicToggleBtn.querySelector('.music-icon');
-    const playerDisplayName = document.getElementById('player-display-name');
-    const proposalName = document.getElementById('proposal-name');
-    const yesBtn = document.getElementById('yes-btn');
-    const noBtn = document.getElementById('no-btn');
-    const resetBtn = document.getElementById('reset-btn');
-    const particlesContainer = document.getElementById('particles-container');
-
-    document.addEventListener('DOMContentLoaded', () => {
-      // Initialize dynamic name fills
-      playerDisplayName.textContent = username;
-      proposalName.textContent = username;
-
-      // Start particles background
-      initBackgroundParticles();
-
-      // Setup runaway proposal button
-      initRunawayButton();
-
-      // Setup audio controls
-      initAudioControls();
-
-      // Initialize navigation triggers
-      initNavigation();
-
-      // IMMEDIATELY initialize and start the game!
-      game = new CatchGame('game-canvas', () => {
-        showScreen('proposal-screen');
-        game.stop();
-      });
-      game.start();
-
-      // Play music on first interaction (bypasses browser autoplay block)
-      const startMusicOnce = () => {
-        if (!musicInitialized) {
-          loveSynth.init();
-          loveSynth.start();
-          musicInitialized = true;
-          musicText.textContent = "Mute Music";
-          musicIcon.classList.add('icon-playing');
-        }
-        // Clean up listeners
-        window.removeEventListener('mousemove', startMusicOnce);
-        window.removeEventListener('touchstart', startMusicOnce);
-        window.removeEventListener('click', startMusicOnce);
-      };
-
-      window.addEventListener('mousemove', startMusicOnce);
-      window.addEventListener('touchstart', startMusicOnce);
-      window.addEventListener('click', startMusicOnce);
-    });
-
-    function showScreen(screenId) {
-      const targetScreen = document.getElementById(screenId);
-      const activeScreen = document.querySelector('.screen.active');
-      
-      if (activeScreen) {
-        activeScreen.classList.remove('visible');
-        setTimeout(() => {
-          activeScreen.classList.remove('active');
-          targetScreen.classList.add('active');
-          void targetScreen.offsetWidth;
-          targetScreen.classList.add('visible');
-        }, 450);
-      } else {
-        targetScreen.classList.add('active');
-        void targetScreen.offsetWidth;
-        targetScreen.classList.add('visible');
-      }
-    }
-
-    function initNavigation() {
-      yesBtn.addEventListener('click', () => {
-        showScreen('success-screen');
-        loveSynth.playSuccessFanfare();
-        startConfetti();
-      });
-
-      resetBtn.addEventListener('click', () => {
-        stopConfetti();
-        
-        noBtn.style.position = 'relative';
-        noBtn.style.left = 'auto';
-        noBtn.style.top = 'auto';
-        noBtn.style.transform = 'none';
-        
-        showScreen('game-screen');
-        setTimeout(() => {
-          game.start();
-        }, 500);
-      });
-    }
-
-    function initAudioControls() {
-      musicToggleBtn.addEventListener('click', () => {
-        const isPlaying = loveSynth.toggle();
-        musicInitialized = true;
-        
-        if (isPlaying) {
-          musicText.textContent = "Mute Music";
-          musicIcon.classList.add('icon-playing');
-        } else {
-          musicText.textContent = "Play Music";
-          musicIcon.classList.remove('icon-playing');
-        }
-      });
-    }
-
-    function initBackgroundParticles() {
-      const particleSymbols = ['❤️', '💖', '✨', '🌸', '💕'];
-      
-      const spawnParticle = () => {
-        const p = document.createElement('div');
-        p.className = 'heart-particle';
-        p.textContent = particleSymbols[Math.floor(Math.random() * particleSymbols.length)];
-        
-        const size = Math.random() * (isMobile ? 14 : 20) + 12;
-        const left = Math.random() * 100;
-        const duration = Math.random() * 6 + 6;
-        const driftX = (Math.random() - 0.5) * 150;
-        
-        p.style.left = `${left}vw`;
-        p.style.fontSize = `${size}px`;
-        p.style.animationDuration = `${duration}s`;
-        p.style.setProperty('--drift-x', `${driftX}px`);
-        p.style.setProperty('--spin', `${Math.random() > 0.5 ? 360 : -360}deg`);
-        
-        particlesContainer.appendChild(p);
-        
-        setTimeout(() => {
-          p.remove();
-        }, duration * 1000);
-      };
-
-      const initialParticlesCount = isMobile ? 5 : 10;
-      for (let i = 0; i < initialParticlesCount; i++) {
-        spawnParticle();
-      }
-      
-      const spawnIntervalTime = isMobile ? 2000 : 1200;
-      setInterval(spawnParticle, spawnIntervalTime);
-    }
-
-    function initRunawayButton() {
-      const dodge = (e) => {
-        const card = document.querySelector('.proposal-card');
-        const cardRect = card.getBoundingClientRect();
-        const btnRect = noBtn.getBoundingClientRect();
-        
-        noBtn.style.position = 'absolute';
-        
-        const margin = 15;
-        const maxX = cardRect.width - btnRect.width - margin * 2;
-        const maxY = cardRect.height - btnRect.height - margin * 2;
-        
-        let newX = Math.random() * maxX + margin;
-        let newY = Math.random() * maxY + margin;
-        
-        const yesRect = yesBtn.getBoundingClientRect();
-        const yesRelX = yesRect.left - cardRect.left;
-        const yesRelY = yesRect.top - cardRect.top;
-        
-        const distX = Math.abs(newX - yesRelX);
-        const distY = Math.abs(newY - yesRelY);
-        
-        if (distX < 85 && distY < 45) {
-          newX = (newX + 130) % maxX;
-          newY = (newY + 90) % maxY;
-        }
-        
-        noBtn.style.left = `${newX}px`;
-        noBtn.style.top = `${newY}px`;
-      };
-
-      noBtn.addEventListener('mouseenter', dodge);
-      noBtn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        dodge(e);
-      });
-    }
-
-    /* CONFETTI CANVAS */
-    let confettiActive = false;
-    let confettiCanvas = null;
-    let confettiCtx = null;
-    let confettiParticles = [];
-    let confettiTimer = null;
-
-    function startConfetti() {
-      confettiCanvas = document.getElementById('confetti-canvas');
-      confettiCtx = confettiCanvas.getContext('2d');
-      confettiCanvas.style.display = 'block';
-      
-      confettiCanvas.width = window.innerWidth;
-      confettiCanvas.height = window.innerHeight;
-      
-      confettiActive = true;
-      confettiParticles = [];
-      
-      const burstCount = isMobile ? 65 : 150;
-      for (let i = 0; i < burstCount; i++) {
-        spawnConfettiParticle(true);
-      }
-      
-      const intervalDelay = isMobile ? 220 : 100;
-      confettiTimer = setInterval(() => {
-        const maxParticles = isMobile ? 90 : 250;
-        if (confettiParticles.length < maxParticles) {
-          spawnConfettiParticle(false);
-        }
-      }, intervalDelay);
-
-      window.addEventListener('resize', resizeConfettiCanvas);
-      requestAnimationFrame(confettiLoop);
-    }
-
-    function stopConfetti() {
-      confettiActive = false;
-      clearInterval(confettiTimer);
-      if (confettiCanvas) {
-        confettiCanvas.style.display = 'none';
-      }
-      window.removeEventListener('resize', resizeConfettiCanvas);
-    }
-
-    function resizeConfettiCanvas() {
-      if (confettiCanvas) {
-        confettiCanvas.width = window.innerWidth;
-        confettiCanvas.height = window.innerHeight;
-      }
-    }
-
-    function spawnConfettiParticle(isInitialBurst) {
-      const colors = [
-        '#ff416c', '#ff4b2b', '#ff758c', '#ff7eb3', 
-        '#a855f7', '#ec4899', '#f43f5e', '#ffd700'
-      ];
-      
-      confettiParticles.push({
-        x: Math.random() * window.innerWidth,
-        y: isInitialBurst ? Math.random() * window.innerHeight - window.innerHeight : -20,
-        r: Math.random() * 5 + 3,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        vx: (Math.random() - 0.5) * 3.5,
-        vy: Math.random() * 3 + 2,
-        spin: Math.random() * 0.2 - 0.1,
-        rotation: Math.random() * Math.PI
-      });
-    }
-
-    function confettiLoop() {
-      if (!confettiActive) return;
-      
-      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-      
-      for (let i = confettiParticles.length - 1; i >= 0; i--) {
-        const p = confettiParticles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.rotation += p.spin;
-        
-        confettiCtx.save();
-        confettiCtx.translate(p.x, p.y);
-        confettiCtx.rotate(p.rotation);
-        confettiCtx.fillStyle = p.color;
-        confettiCtx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r);
-        confettiCtx.restore();
-        
-        if (p.y > window.innerHeight + 10) {
-          confettiParticles.splice(i, 1);
-        }
-      }
-      
-      requestAnimationFrame(confettiLoop);
-    }
-  </script>
+    </div>
+
+    <!-- STAGE 2: Main Website (Fades in after envelope opens) -->
+    <main id="main-content" class="hidden">
+        <!-- Floating Romantic Orbs -->
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+
+        <!-- Hero Section -->
+        <section id="hero" class="section-container">
+            <div class="hero-content">
+                <span class="heart-sparkle">✦ 💖 ✦</span>
+                <h1 class="glow-text">Happy Birthday, Rissum!</h1>
+                <p class="hero-subtitle">Today is the celebration of a masterpiece walking among us.</p>
+                <div class="scroll-indicator">
+                    <span>Scroll to explore the magic</span>
+                    <svg class="down-arrow" viewBox="0 0 24 24">
+                        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Polaroid Visual Showcase Section -->
+        <section id="visual-showcase" class="section-container">
+            <h2 class="section-title">Moments of Pure Grace</h2>
+            <div class="polaroid-grid">
+                <!-- Polaroid 1: Starry Sky -->
+                <div class="polaroid-card reveal-on-scroll">
+                    <div class="polaroid-img-wrapper">
+                        <img src="assets/starry_sky_dream.png" alt="Rissum under starry skies decoration" loading="lazy">
+                        <div class="polaroid-overlay"></div>
+                    </div>
+                    <div class="polaroid-caption">
+                        <h4>A Celestial Wonder</h4>
+                        <p>Even the stars align just to capture a glimpse of your radiant light.</p>
+                    </div>
+                </div>
+
+                <!-- Polaroid 2: Magical Rose -->
+                <div class="polaroid-card reveal-on-scroll delay-1">
+                    <div class="polaroid-img-wrapper">
+                        <img src="assets/magical_rose.png" alt="A magical glowing rose decoration" loading="lazy">
+                        <div class="polaroid-overlay"></div>
+                    </div>
+                    <div class="polaroid-caption">
+                        <h4>Grace and Rarity</h4>
+                        <p>Like a rose that blooms in starlight, your beauty is unique and eternal.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Compliment Box: "Why Rissum is the Most Beautiful" -->
+        <section id="compliments" class="section-container">
+            <div class="glass-card compliment-card reveal-on-scroll">
+                <div class="sparkle-decorative">✨</div>
+                <h3>Why You are the Most Beautiful Girl</h3>
+                <div class="compliment-display-wrapper">
+                    <p id="compliment-text">"Your smile has the power to brighten up the darkest of days and put the stars to shame."</p>
+                </div>
+                <button id="next-compliment-btn" class="btn-primary">
+                    <span>Reveal Another Secret</span>
+                    <svg viewBox="0 0 24 24" class="btn-arrow">
+                        <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- Virtual Birthday Cake & Wishes -->
+        <section id="interactive-cake" class="section-container">
+            <div class="glass-card cake-card reveal-on-scroll">
+                <h2 class="section-title">Blow Out the Candles</h2>
+                <p class="cake-instruction">Click the candles to blow them out and make your wish come true.</p>
+                
+                <!-- SVG/CSS Interactive Cake -->
+                <div class="cake-wrapper">
+                    <div class="cake">
+                        <div class="candle-glow" id="glow-1"></div>
+                        <div class="candle-glow" id="glow-2"></div>
+                        <div class="candle-glow" id="glow-3"></div>
+
+                        <div class="candle" id="candle-1">
+                            <div class="flame"></div>
+                        </div>
+                        <div class="candle" id="candle-2">
+                            <div class="flame"></div>
+                        </div>
+                        <div class="candle" id="candle-3">
+                            <div class="flame"></div>
+                        </div>
+
+                        <div class="cake-top">
+                            <div class="dripping-frosting"></div>
+                        </div>
+                        <div class="cake-middle"></div>
+                        <div class="cake-bottom"></div>
+                    </div>
+                    <div class="cake-stand"></div>
+                </div>
+
+                <!-- Hidden wish card that fades in after blowing out candles -->
+                <div id="wish-reveal-card" class="hidden">
+                    <div class="confetti-streamer">🎉</div>
+                    <h3>May All Your Wishes Come True!</h3>
+                    <p>Wishing you a year filled with infinite happiness, magical moments, and the love you so deeply deserve.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Timeline: A Journey of Compliments -->
+        <section id="timeline" class="section-container">
+            <h2 class="section-title">A Symphony of Elegance</h2>
+            <div class="timeline-container">
+                <div class="timeline-item reveal-on-scroll">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-card">
+                        <span class="timeline-date">Your Presence</span>
+                        <h4>Warmth and Comfort</h4>
+                        <p>The room lights up the instant you step in. You carry a peace that comforts everyone around you.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item reveal-on-scroll">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-card">
+                        <span class="timeline-date">Your Eyes</span>
+                        <h4>A Universe Within</h4>
+                        <p>There is a depth in your eyes that holds stories of grace, kindness, and magic that words can't capture.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal-on-scroll">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-card">
+                        <span class="timeline-date">Your Heart</span>
+                        <h4>Pure Golden Soul</h4>
+                        <p>Beyond your breathtaking appearance lies an even more beautiful heart—generous, pure, and incredibly kind.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Love Letter Scroll -->
+        <section id="love-letter" class="section-container">
+            <div class="letter-scroll-wrapper reveal-on-scroll">
+                <div class="scroll-roller scroll-top"></div>
+                <div class="scroll-body glass-card">
+                    <h2 class="cursive-heading">Dearest Rissum,</h2>
+                    <p class="letter-paragraph">
+                        On this exceptionally beautiful day, the world was blessed with your existence. Words often fail to capture the true essence of someone so magnificent, but if I had to try, I would say you are a walking poem. 
+                    </p>
+                    <p class="letter-paragraph">
+                        Your beauty isn't just in the symmetry of your smile or the radiance of your eyes; it is in the gentle way you carry yourself, the kindness you radiate, and the stardust you leave in the hearts of anyone lucky enough to know you. You are the kind of beautiful that makes the world feel like a better, brighter, and more magical place.
+                    </p>
+                    <p class="letter-paragraph">
+                        Never doubt how precious and incredible you are. You deserve the stars, the moon, and all the happiness this life can possibly hold. 
+                    </p>
+                    <p class="letter-paragraph signature">
+                        With all my admiration and warmest wishes,<br>
+                        <span>Happy Birthday 💖</span>
+                    </p>
+                </div>
+                <div class="scroll-roller scroll-bottom"></div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>Made with love for Rissum | Happy Birthday ✨</p>
+        </footer>
+    </main>
+
+    <!-- Script tags -->
+    <script src="script.js"></script>
 </body>
 </html>
